@@ -1,4 +1,0 @@
-<cz.senkadam.gatlingsql.requests.SqlBuilderSpec-results timestamp="1421065871454"><result location="cz.senkadam.gatlingsql.requests.SqlBuilderSpec (SqlBuilderSpec.scala:18)" id="-1444813613"><stats time="33" expectations="1" failures="1" examples="1"></stats></result>
-</cz.senkadam.gatlingsql.requests.SqlBuilderSpec-results>
-<cz.senkadam.gatlingsql.requests.SqlBuilderSpec-stats timestamp="1421065871464"><stats time="16" expectations="1" failures="1" examples="1"></stats></cz.senkadam.gatlingsql.requests.SqlBuilderSpec-stats>
-<cz.senkadam.gatlingsql.requests.SqlBuilderSpec-stats timestamp="1421065947875"><stats time="15" expectations="1" successes="1" examples="1"><trend><stats time="15" failures="-1" successes="1"></stats></trend></stats></cz.senkadam.gatlingsql.requests.SqlBuilderSpec-stats>
