@@ -14,9 +14,18 @@ import org.junit.runner._
 
 class SqlBuilderSpec extends Specification{
 
-  "selectQuery method" should {
+  val selectQuerySQLString= "SELECT * FROM T"
+  val updateQuerySQLString= "CREATE TABLE T"
+
+  "selectQuery method in SqlBuilder" should {
     "return instance of SqlSelectStatement" in {
-      SqlBuilder.sql("ahoj").selectQuery("SELECT").build must_=== SqlSelectStatement("SELECT")
+      SqlBuilder.sql("testSelect").selectQuery(selectQuerySQLString).build must_=== SqlSelectStatement(selectQuerySQLString)
+    }
+  }
+
+  "updateQuery method in SqlBuilder" should {
+    "return instance of SqlUdateStatement" in {
+      SqlBuilder.sql("testUpdate").updateQuery(updateQuerySQLString).build must_=== SqlUpdateStatement(updateQuerySQLString)
     }
   }
 

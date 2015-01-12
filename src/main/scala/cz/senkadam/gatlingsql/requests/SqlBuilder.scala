@@ -33,8 +33,8 @@ class SqlBuilder(val requestName: String) {
    */
   def selectQuery(query: String) = new SqlRequestBuilder(requestName, SqlSelectStatement(query))
 
-  def preparedQuery(query: String) = new SqlRequestBuilder(requestName, SqlSelectStatement(query))
+  //def preparedQuery(query: String) = new SqlRequestBuilder(requestName, SqlSelectStatement(query))
 
-  def updateQuery(query: String) = new SqlRequestBuilder(requestName, SqlSelectStatement(query))
+  def updateQuery(query: String) = new SqlRequestBuilder(requestName, SqlUpdateStatement(query))
 
 }
