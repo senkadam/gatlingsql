@@ -4,7 +4,7 @@
 
     <groupId>cz.senkadam.gatlingsql</groupId>
     <artifactId>gatling-sql</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <scm>
         <connection>scm:git:https://github.com/senkadam/gatlingsql.git</connection>
