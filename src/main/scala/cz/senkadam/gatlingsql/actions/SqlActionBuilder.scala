@@ -23,6 +23,6 @@ class SqlActionBuilder(requestName: String, requestBuilder: SqlRequestBuilder) e
    * Contract new SQLActions and wires them up with the Actor stuff.
    */
   def build(next: ActorRef, protocolConfigurationRegistry: Protocols) = {
-    system.actorOf(Props(new SqlAction(requestName, next, requestBuilder) with ConnectionTimeExcluded))
+    system.actorOf(Props(new SqlAction(requestName, next, requestBuilder) with ConnectionReuse))
   }
 }

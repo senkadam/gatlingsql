@@ -1,9 +1,6 @@
 package cz.senkadam.gatlingsql.requests
 
-import org.junit.runners.JUnit4
 import org.specs2.mutable._
-import org.junit.runner._
-
 
 
 

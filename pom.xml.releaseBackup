@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>cz.senkadam.gatlingsql</groupId>
+    <artifactId>gatling-sql</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <scm>
+        <connection>scm:git:https://github.com/senkadam/gatlingsql.git</connection>
+        <developerConnection>scm:git:git@github.com:senkadam/gatlingsql.git</developerConnection>
+        <url>https://github.com/senkadam/gatlingsql</url>
+        <tag>master</tag>
+    </scm>
+
+    <build><plugins>
+        <plugin>
+        <groupId>net.alchim31.maven</groupId>
+        <artifactId>scala-maven-plugin</artifactId>
+        <version>3.1.6</version>
+        </plugin>
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.0.2</version>
+            </plugin>
+
+
+        <plugin>
+            <groupId>net.alchim31.maven</groupId>
+            <artifactId>scala-maven-plugin</artifactId>
+            <executions>
+                <execution>
+                    <id>scala-compile-first</id>
+                    <phase>process-resources</phase>
+                    <goals>
+                        <goal>add-source</goal>
+                        <goal>compile</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <id>scala-test-compile</id>
+                    <phase>process-test-resources</phase>
+                    <goals>
+                        <goal>testCompile</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <executions>
+                <execution>
+                    <phase>compile</phase>
+                    <goals>
+                        <goal>compile</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+            <plugin>
+                <groupId>com.mmakowski</groupId>
+                <artifactId>specs2-maven-plugin</artifactId>
+                <version>0.4.4</version>
+                <executions>
+                    <execution>
+                        <id>verify</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>run-specs</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.10</version>
+                <configuration>
+                    <useSystemClassLoader>false</useSystemClassLoader>
+                    <argLine>-Xmx1024m</argLine>
+                    <includes>
+                        <include>**/*Unit.java</include>
+                        <include>**/*Spec.java</include>
+                        <include>**/*Spec.scala</include>
+                        <include>**/*Test.scala</include>
+                    </includes>
+                </configuration>
+            </plugin>
+
+
+        </plugins>
+    </build>
+
+
+
+    <repositories>
+        <repository>
+            <id>excilys</id>
+            <name>Excilys Repository</name>
+            <url>http://repository.excilys.com/content/groups/public</url>
+        </repository>
+
+        <repository>
+            <id>oss.sonatype.org</id>
+            <name>releases</name>
+            <url>https://oss.sonatype.org/content/repositories/releases</url>
+        </repository>
+        <repository>
+            <id>scalaz</id>
+            <name>Scalaz Bintray Repo</name>
+            <url>http://dl.bintray.com/scalaz/releases</url>
+        </repository>
+
+        <repository>
+            <id>centralmaven</id>
+            <name>Maven Central</name>
+            <url>http://repo1.maven.org/maven2/</url>
+        </repository>
+
+
+    </repositories>
+
+
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <gatling.version>2.1.2</gatling.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>2.11.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.scala-lang.modules</groupId>
+            <artifactId>scala-parser-combinators_2.11</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.gatling.highcharts</groupId>
+            <artifactId>gatling-charts-highcharts</artifactId>
+            <version>${gatling.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.specs2</groupId>
+            <artifactId>specs2_2.11</artifactId>
+            <version>2.4.15</version>
+            <scope>test</scope>
+        </dependency>
+
+       <!-- <dependency>
+            <groupId>org.specs2</groupId>
+            <artifactId>specs2-html_2.11</artifactId>
+            <version>2.4.14</version>
+            <scope>test</scope>
+        </dependency>
+-->
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derbyclient</artifactId>
+            <version>10.10.1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>10.10.1.1</version>
+
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.9.5</version>
+        </dependency>
+
+
+
+    </dependencies>
+
+
+</project>

@@ -1,5 +1,7 @@
 package cz.senkadam.gatlingsql.requests
 
+import cz.senkadam.gatlingsql.datasource.EmptySource
+import cz.senkadam.gatlingsql.datasource.Source
 /**
  * Created by senk on 7.1.15.
  */
@@ -10,14 +12,19 @@ package cz.senkadam.gatlingsql.requests
 object SqlBuilder {
   /**
    * DSL chain starts from here.
+   *
    */
+  def sql=new SqlBuilder()
+
   def sql(requestName: String) = new SqlBuilder(requestName)
+
+  def sql(requestName:String, dataSource:Source)=new SqlBuilder(requestName,dataSource)
 }
 
 /**
  * This class contains specific kinds of SQL queries you can make.
  */
-class SqlBuilder(val requestName: String) {
+class SqlBuilder(val requestName: String="NO NAME", val dataSource:Source=EmptySource()) {
 
   //TODO COMMENTS UPDATE
   /**
@@ -33,8 +40,16 @@ class SqlBuilder(val requestName: String) {
    */
   def selectQuery(query: String) = new SqlRequestBuilder(requestName, SqlSelectStatement(query))
 
-  //def preparedQuery(query: String) = new SqlRequestBuilder(requestName, SqlSelectStatement(query))
+  def preparedQuery(query: String)= new SqlRequestBuilder(requestName, SqlPreparedSelectStatement(query,dataSource))
 
   def updateQuery(query: String) = new SqlRequestBuilder(requestName, SqlUpdateStatement(query))
 
+  def selectQuery(requestName:String, query: String) = new SqlRequestBuilder(requestName, SqlSelectStatement(query))
+
+  def preparedQuery(requestName:String,query: String)= new SqlRequestBuilder(requestName, SqlPreparedSelectStatement(query,dataSource))
+
+  def updateQuery(requestName:String,query: String) = new SqlRequestBuilder(requestName, SqlUpdateStatement(query))
+
 }
+
+

@@ -1,9 +1,11 @@
 package cz.senkadam.gatlingsql.actions
 
 import java.sql.{Connection, DriverManager}
+import java.util.concurrent.TimeUnit
 
 import io.gatling.core.config.GatlingConfiguration.configuration
-
+import org.apache.commons.pool2.{BasePooledObjectFactory, PooledObject}
+import org.apache.commons.pool2.impl.{GenericObjectPoolConfig, DefaultPooledObject, GenericObjectPool}
 /**
  * Created by senk on 8.1.15.
  */
@@ -24,6 +26,8 @@ trait ConnectionHandling {
    * @return SQL Connection and time
    */
   def getConnectionAndTimes: ConnectionAndTimes
+
+  def returnConnection(connection:Connection):Unit = connection.close()
 }
 
 /**
@@ -43,7 +47,7 @@ trait ConnectionTimeIncluded extends ConnectionHandling {
 }
 
 /**
- * Mixin providing function returning proper time including creation of SQL connection
+ * Mixin providing function returning proper time excluding creation of SQL connection
  */
 trait ConnectionTimeExcluded extends ConnectionHandling {
   /**
@@ -59,12 +63,70 @@ trait ConnectionTimeExcluded extends ConnectionHandling {
 }
 
 /**
+ * Mixin providing function returning proper time excluding creation of SQL connection,
+ * Connections will be reused.
+ */
+trait ConnectionReuse extends ConnectionHandling {
+
+  /**
+   * Function
+   * @return SQL Connection and time starting after connection creation
+   */
+  override def getConnectionAndTimes = {
+    val time = System.currentTimeMillis()
+
+    new ConnectionAndTimes(ConnectionFactory.pool.borrowObject(TimeUnit.MINUTES.toMillis(5)), time)
+  }
+
+  override def returnConnection(connection:Connection):Unit = ConnectionFactory.pool.returnObject(connection)
+}
+
+
+/**
  * Factory object creating a SQL connection
  */
 object ConnectionFactory {
 
-  def connection: Connection = DriverManager.getConnection(
-    configuration.data.jdbc.db.url,
-    configuration.data.jdbc.db.username,
-    configuration.data.jdbc.db.password)
+  class ConnectionPoolFactory extends BasePooledObjectFactory[Connection]{
+    override def create(): Connection = ConnectionFactory.connection
+
+    override def wrap(connection: Connection): PooledObject[Connection] = new DefaultPooledObject[Connection](connection)
+
+    override def destroyObject(p: PooledObject[Connection]): Unit = p.getObject.close()
+
+    override def validateObject(p: PooledObject[Connection]): Boolean = !p.getObject.isClosed
+  }
+  val connectionPoolConfig = {
+    val cfg = new GenericObjectPoolConfig
+    cfg.setMaxTotal( System.getProperty("maxDbConnections", Integer.MAX_VALUE+"").toInt )
+    cfg
+  }
+  class ConnectionPool extends GenericObjectPool[Connection](new ConnectionPoolFactory, connectionPoolConfig){
+
+  }
+
+  lazy val pool =  new ConnectionPool
+
+  var dBWithSet: Option[DBWithSettings]=None
+
+  def setConnection(dBWithSettings: DBWithSettings):Unit={
+    dBWithSet=Some(dBWithSettings)
+
+  }
+
+  def connection: Connection = dBWithSet match {
+    case None => DriverManager.getConnection(
+      configuration.data.jdbc.db.url,
+      configuration.data.jdbc.db.username,
+      configuration.data.jdbc.db.password)
+    case Some(x)=>DriverManager.getConnection(
+      x.url,
+      x.username,
+      x.password)
+  }
+
+
+
 }
+
+case class DBWithSettings(url:String, username:String, password:String)

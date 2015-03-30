@@ -17,7 +17,10 @@ class SqlRequestBuilder(val requestName: String, val sqlStatement: SqlStatement)
   /**
    * This guy handles building the instance using all the parameters we've passed in - not so much right now
    */
-  private[gatlingsql] def build = sqlStatement
+  private[gatlingsql] def build = sqlStatement match {
+    case a:SqlPreparedSelectStatement => a.next
+    case _ => sqlStatement
+  }
 
   /**
    * Method converting this builder into instance of a SqlActionBuilder.
