@@ -5,7 +5,9 @@ import java.util.concurrent.TimeUnit
 
 import io.gatling.core.config.GatlingConfiguration.configuration
 import org.apache.commons.pool2.{BasePooledObjectFactory, PooledObject}
-import org.apache.commons.pool2.impl.{GenericObjectPoolConfig, DefaultPooledObject, GenericObjectPool}
+import org.apache.commons.pool2.impl.{GenericObjectPoolConfig, DefaultPooledObject}
+import org.apache.commons.pool2.impl.GenericObjectPool
+
 /**
  * Created by senk on 8.1.15.
  */
@@ -75,7 +77,7 @@ trait ConnectionReuse extends ConnectionHandling {
   override def getConnectionAndTimes = {
     val time = System.currentTimeMillis()
 
-    new ConnectionAndTimes(ConnectionFactory.pool.borrowObject(TimeUnit.MINUTES.toMillis(5)), time)
+    new ConnectionAndTimes(ConnectionFactory.pool.borrowObject(), time)
   }
 
   override def returnConnection(connection:Connection):Unit = ConnectionFactory.pool.returnObject(connection)

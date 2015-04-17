@@ -1,2 +1,5 @@
+derby.log
+*.iml
 .idea/
 target/
+db_test/
